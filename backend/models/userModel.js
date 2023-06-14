@@ -7,6 +7,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true,
@@ -18,7 +22,8 @@ const userSchema = mongoose.Schema({
     },
 },
     {
-        timestamps: true
+        timestamps: true,
+        default: Date.now
     }
 );
 
