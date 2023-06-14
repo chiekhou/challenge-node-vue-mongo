@@ -4,8 +4,8 @@ const { User } = require("../models/userModel")
 
 // Accés public
 // Auth user/set token
-// GET /api/users/auth
-const authUser = asyncHandler(async (req, res) => {
+// GET /api/users/login
+const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
@@ -14,8 +14,10 @@ const authUser = asyncHandler(async (req, res) => {
         res.status(201).json({
             _id: user._id,
             name: user.name,
+            username: user.username,
             email: user.email
         });
+
     } else {
         res.status(401);
         throw new Error("Email ou mot de passe de invalides")
@@ -24,9 +26,15 @@ const authUser = asyncHandler(async (req, res) => {
 })
 
 // Accés public
-// POST /api/users
+// POST /api/users/register
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, username, confirm_password } = req.body;
+
+    if (password !== confirm_password) {
+        return res.status(400).json({
+            msg: "Les mots de passe ne sont pas identiques"
+        });
+    }
 
     const userExists = await User.findOne({ email });
 
@@ -37,6 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const user = await User.create({
         name,
+        username,
         email,
         password
     });
@@ -46,6 +55,7 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(201).json({
             _id: user._id,
             name: user.name,
+            username: user.name,
             email: user.email
         });
     } else {
@@ -73,6 +83,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     const user = {
         _id: req.user._id,
         name: req.user.name,
+        username: req.user.username,
         email: req.user.email,
 
     }
@@ -86,6 +97,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     if (user) {
         user.name = req.body.name || user.name;
+        user.username = req.body.username || user.username;
         user.email = req.body.email || user.email;
 
         if (req.body.password) {
@@ -96,6 +108,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         res.status(200).json({
             _id: updateUser._id,
             name: updateUser.name,
+            username: updateUser.username,
             email: updateUser.email,
         });
 
@@ -105,4 +118,4 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { authUser, registerUser, logoutUser, getUserProfile, updateUserProfile }; 
+module.exports = { loginUser, registerUser, logoutUser, getUserProfile, updateUserProfile }; 
