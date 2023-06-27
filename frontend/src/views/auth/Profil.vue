@@ -1,44 +1,29 @@
 <template>
     <div>
-      <h2>Profil</h2>
-      <div class="card" >
-        <ul class="list-group">
-          <li class="list-group-item">Email: {{ user.email }}</li>
-          <li class="list-group-item">Username: {{ user.username }}</li>
-          <li class="list-group-item">Name: {{ user.name }}</li>
-        </ul>
-      </div>
-      <h3> Vous n'êtes pas connecté</h3>
+    <h2>Profil</h2>
+    <div class="card" v-if="user">
+      <ul class="list-group">
+        <li class="list-group-item">Email: {{ user.email }}</li>
+        <li class="list-group-item">Username: {{ user.username }}</li>
+        <li class="list-group-item">Name: {{ user.name }}</li>
+      </ul>
     </div>
-  </template>
-  
-  <script>
-//   import axios from 'axios'
-//   // import { mapActions, mapGetters } from "vuex";
-//   export default {
-//   //   computed: mapGetters(["user"]),
-//   //   methods: {
-//   //     ...mapActions(["getProfile"])
-//   //   },
-//   //   async created() {
-//   //     this.getProfile();
-//   //   }
-//   // };
+  </div>
+</template>
 
-//   data() {
-//     return {
-//       user: null
-//     }
-//   },
+<script>
+import { mapActions, mapGetters } from "vuex";
+export default {
 
-//   async created() {
-//     const response = await axios.get('http://localhost:6001/api/users/profil')
-//     this.user = response.data;
-//     console.log(this.user );
-    
-//   }
-// }
-  </script>
+  computed: mapGetters(["user"]),
+  methods: {
+    ...mapActions(["getProfile"])
+  },
+  created() {
+    this.getProfile();
+  }
+};
+</script>
   
   <style>
   </style>

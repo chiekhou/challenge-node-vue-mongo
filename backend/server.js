@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require('cors');
-// const passport = require('passport')
 const path = require('path');
 const bodyParser = require('body-parser')
 const dotenv = require("dotenv");
@@ -11,7 +10,12 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware')
 const port = process.env.PORT || 3000;
 const userRoutes = require('./routes/userRoutes.js').router
 // const users = require('./routes/api/users');
-
+const corsOptions = {
+    origin: ['http://localhost:3000'],
+    credentials: true,            //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+    exposeHeaders: ["Authorization"]
+}
 
 
 const { connectDB } = require("./config/database");
@@ -46,26 +50,16 @@ const app = express();
 
 app.use(express.json());
 
-// Middlewares
-// Fomr Data Middleware
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-// Json Body Middleware
-app.use(bodyParser.json());
 
 // Cors Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Setting up the static directory
 app.use(express.static(path.join(__dirname, 'public')))
-
-// // Use the passport Middleware
-// app.use(passport.initialize());
-
-// // Bring in the Passport Strategy 
-// require('./config/passport')(passport);
 
 app.use(cookieParser());
 
@@ -76,7 +70,6 @@ app.get('/', (req, res) => res.send('Projet en cours'));
 
 app.use(notFound);
 app.use(errorHandler);
-
 
 
 app.listen(port, () => console.log(`Projet en cours sur le port : ${port}`));
