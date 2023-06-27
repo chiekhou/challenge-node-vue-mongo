@@ -1,6 +1,5 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <a class="navbar-brand" href="#">Nav</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -18,7 +17,6 @@
       <li class="nav-item active"> 
     <router-link to="/" class="nav-link text-white" >
        Home 
-       <span class="sr-only">(current)</span>
        </router-link> 
       </li>
         <li class="nav-item" v-if="!isLoggedIn">
@@ -29,7 +27,14 @@
           <router-link to="/register" class="nav-link" > Register </router-link>
         </li>
         <li class="nav-item" v-if="isLoggedIn" >
+          <router-link to="/reset" class="nav-link" > Reset </router-link>
+        </li>
+
+        <li class="nav-item" v-if="isLoggedIn" >
           <router-link to="/profil" class="nav-link" > Profil </router-link>
+        </li>
+        <li class="nav-item" v-if="isLoggedIn && user.isAdmin" >
+          <router-link to="/admin/dashboard" class="nav-link" > Dashboard </router-link>
         </li>
         <li class="nav-item" v-if="isLoggedIn">
           <a to="/logout" class="nav-link" @click.prevent="logoutUser">Logout</a>
@@ -47,7 +52,7 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["isLoggedIn"])
+    ...mapGetters(["isLoggedIn","user"])
   },
   methods: {
     ...mapActions(["logout"]),

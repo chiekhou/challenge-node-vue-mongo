@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { generateToken } = require('../utils/generateToken')
+const jwt = require('jsonwebtoken')
 const { User } = require("../models/userModel")
 
 // Accés public
@@ -10,12 +10,13 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
-        generateToken(res, user._id)
         res.status(201).json({
             _id: user._id,
             name: user.name,
             username: user.username,
-            email: user.email
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id)
         });
 
     } else {
@@ -51,12 +52,13 @@ const registerUser = asyncHandler(async (req, res) => {
     });
 
     if (user) {
-        generateToken(res, user._id)
         res.status(201).json({
             _id: user._id,
             name: user.name,
-            username: user.name,
-            email: user.email
+            username: user.username,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id)
         });
     } else {
         res.status(400);
@@ -65,33 +67,42 @@ const registerUser = asyncHandler(async (req, res) => {
 
 })
 
+
+const getUserProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        res.json({
+            _id: user._id,
+            username: user.username,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+        });
+    } else {
+        res.status(404);
+        throw new Error('Utilisateur non trouvé');
+    }
+});
+
 // Accés public
 // POST /api/users/logout
-const logoutUser = asyncHandler(async (req, res) => {
-    res.cookie('jwt', '', {
-        httpOnly: true,
-        expires: new Date(0),
-    })
+// const logoutUser = asyncHandler(async (req, res) => {
+//     res.cookie('jwt', '', {
+//         httpOnly: true,
+//         expires: new Date(0),
+//     })
 
-    res.status(200).json({ message: 'Deconnexion Utilisateur' });
-})
-
-// Accés privé
-// GET /api/users/profile
-const getUserProfile = asyncHandler(async (req, res) => {
-    // console.log(req.user);
-    const user = {
-        _id: req.user._id,
-        name: req.user.name,
-        username: req.user.username,
-        email: req.user.email,
-
-    }
-    res.status(200).json(user);
-})
+//     res.status(200).json({ message: 'Deconnexion Utilisateur' });
+// })
 
 // Accés privé
-// GET /api/users/profile
+// GET /api/users/profil
+
+
+
+// Accés privé
+// PUT /api/users/profil
 const updateUserProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
@@ -118,4 +129,82 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { loginUser, registerUser, logoutUser, getUserProfile, updateUserProfile }; 
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private/Admin
+const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
+});
+
+// @desc    Get user by ID
+// @route   GET /api/users/:id
+// @access  Private/Admin
+const getUserById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id).select('-password');
+    if (user) {
+        res.json(user);
+    } else {
+        res.status(404);
+        throw new Error('User non trouvé');
+    }
+});
+
+// @desc    Update user
+// @route   PUT /api/users/:id
+// @access  Private/Admin
+const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        user.username = req.body.username || user.username;
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.isAdmin = Boolean(req.body.isAdmin);
+
+        if (req.body.password) {
+            user.password = req.body.password;
+        }
+
+
+        const updatedUser = await user.save();
+
+        res.json({
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+        });
+    } else {
+        res.status(404);
+        throw new Error('User non trouvé');
+    }
+});
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        if (user.isAdmin) {
+            res.status(400);
+            throw new Error('Can not delete admin user');
+        }
+        await User.deleteOne({ _id: user._id });
+        res.json({ message: 'User removed' });
+    } else {
+        res.status(404);
+        throw new Error('User non trouvé');
+    }
+});
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    })
+}
+
+module.exports = { loginUser, registerUser, getUserProfile, updateUserProfile, getUserById, updateUser, getUsers, deleteUser }; 

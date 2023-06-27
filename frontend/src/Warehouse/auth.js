@@ -1,6 +1,7 @@
 import axios from 'axios';
 import router from '../routes/router';
 
+
 const state = {
     token: localStorage.getItem('token') || '',
     user: {},
@@ -24,16 +25,35 @@ const getters = {
 };
 
 const actions = {
+
+    // Register User
+    async register({
+        commit
+    }, userData) {
+        try {
+            await commit('register_request');
+            let res = await axios.post('/api/users/', userData);
+            if (res.data !== undefined) {
+                await commit('register_success');
+            }
+            return res;
+        } catch (err) {
+            await commit('register_error', err)
+        }
+    },
+
     // Login Action
     async login({ commit
     }, user) {
         commit('auth_request');
         try {
-            let res = await axios.post('http://localhost:6001/api/users/login', user);
-            if (res.data.success) {
+            let res = await axios.post('/api/users/login', user)
+            if (res.data) {
                 const token = res.data.token;
-                const user = res.data.user;
+                const user = res.data;
 
+                console.log(token);
+                console.log(user);
                 // Store the token into the localstorage
                 localStorage.setItem("token", token);
                 // Set the axios defaults
@@ -43,42 +63,29 @@ const actions = {
             return res;
 
         } catch (err) {
-            commit('register_error', err);
+            await commit('register_error', err);
         }
     },
 
-    // Register User
-    async register({
-        commit
-    }, userData) {
-        try {
-            commit('register_request');
-            let res = await axios.post('http://localhost:6001/api/users/register', userData);
-            if (res.data.success !== undefined) {
-                commit('register_success');
-            }
-            return res;
-        } catch (err) {
-            commit('register_error', err)
-        }
-    },
 
     // Get the user Profile
     async getProfile({
         commit
     }) {
         commit('profile_request');
-        let res = await axios.get('http://localhost:6001/api/users/login/profil')
-        commit('user_profile', res.data.user)
+        let res = await axios.get('api/users/profil');
+        console.log(res);
+        commit('user_profile', res.data)
         return res;
     },
+
 
     // Logout the user
     async logout({
         commit
     }) {
-        localStorage.removeItem('token');
-        commit('logout');
+        await localStorage.removeItem('token');
+        await commit('logout');
         delete axios.defaults.headers.common['Authorization'];
         router.push('/login');
         return
@@ -86,6 +93,7 @@ const actions = {
 };
 
 const mutations = {
+
     auth_request(state) {
         state.error = null
         state.status = 'loading'
@@ -125,6 +133,7 @@ const mutations = {
     profile_request(state) {
         state.status = 'loading'
     },
+
     user_profile(state, user) {
         state.user = user
     }

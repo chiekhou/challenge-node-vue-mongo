@@ -1,4 +1,5 @@
 <template>
+  <div>
         <main class="form-signin w-100 m-auto">
   <form @submit.prevent="registerUser">
 
@@ -33,12 +34,14 @@
     &nbsp;&nbsp;&nbsp;&nbsp;
     <router-link to="/login" class="">Already have an account ?</router-link>
   </form>
-
   </main>
+  <!-- <p v-if="showError" id="error">Username already exists</p> -->
+</div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -51,7 +54,7 @@ export default {
   },
   methods: {
     ...mapActions(["register"]),
-    registerUser() {
+   async registerUser() {
       let user = {
         username: this.username,
         password: this.password,
@@ -59,9 +62,9 @@ export default {
         email: this.email,
         name: this.name
       };
-      this.register(user)
+     await this.register(user)
       .then(res => {
-        if (res.data.success) {
+        if (res) {
           this.$router.push("login");
         }
       });
@@ -69,6 +72,36 @@ export default {
     }
   }
 };
+// export default {
+//   name: "Register",
+//   components: {},
+//   data() {
+//     return {
+//       form: {
+//         username: "",
+//         password: "",
+//         confirm_password: "",
+//         name: "",
+//         email: ""
+//       },
+//       showError: false
+//     };
+//   },
+//   methods: {
+//     ...mapActions(["Register"]),
+//     async submit() {
+//       try {
+//         await this.Register(this.form);
+//         this.$router.push("/login");
+//         this.showError = false
+//       } catch (error) {
+//         this.showError = true
+//       }
+//     },
+//   },
+// };
+
+
 // import axios from "axios";
 // export default {
 // name: "Register",
