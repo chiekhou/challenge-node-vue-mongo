@@ -1,0 +1,39 @@
+API:
+ADMIN:
+ValidateMerchant (après un envoie d'mail à l'inscription d'un marchand)
+GetAllMerchant
+getMerchantByID
+getAllTransaByMerchantID
+DeleteMerchant
+(UpdateMerchant)
+getAllTransac (toutes les transactions des marchands sur une période donnée)  
+
+
+
+MERCHANT:
+GetAllTransacById (librairie ChartJS)
+SearchTransac
+GetMerchantInformationByID
+ManageCredential 
+GetInformationByID (utilisation du manage credential)
+
+
+TRANSAC':
+RefundByID
+RefundPartial (?)
+RefndTotal (?)
+TransacStatus (KPI?)
+TransacHistorique
+ManageFraud
+
+
+API Plateform:
+CreateTransac
+GetAllTransac
+GetTransacByID
+GetOperationByTransacID
+CreateRefund
+
+OPERATIONS 
+
+HISTORIQUE TRANSAC'/OPERATION
