@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const bodyParser = require('body-parser')
 const dotenv = require("dotenv");
-// const { Sequelize } = require('sequelize')
+const Sequelize = require ('sequelize');
 dotenv.config();
 const cookieParser = require('cookie-parser')
 const { notFound, errorHandler } = require('./middleware/errorMiddleware')
@@ -16,35 +16,6 @@ const corsOptions = {
     optionSuccessStatus: 200,
     exposeHeaders: ["Authorization"]
 }
-
-
-const { connectDB } = require("./config/database");
-
-// Connection à la bdd
-
-// const sequelize = new Sequelize(
-//     //nom de la bdd
-//     '',
-//     //l'identifiant de la bdd
-//     '',
-//     //mot de passe de la bdd
-//     '',
-//     {
-//         host: 'localhost',
-//         dialect: 'postgres',
-//         dialecOptions: {
-//             timezone: 'Etc/GMT-2',
-//         },
-//         logging: false
-//     }
-// )
-
-// sequelize.authenticate()
-//     .then(_ => console.log('La connexion à la base de données a bien été connecté'))
-//     .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
-
-
-connectDB();
 
 const app = express();
 
