@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken')
-const { User } = require("../db/models/userModel")
+const { User } = require("../db/models/user.model")
 
 // Accés public
 // Auth user/set token
@@ -207,4 +207,4 @@ const generateToken = (id) => {
     })
 }
 
-module.exports = { loginUser, registerUser, getUserProfile, updateUserProfile, getUserById, updateUser, getUsers, deleteUser }; 
+module.exports = { loginUser, registerUser, getUserProfile, updateUserProfile, getUserById, updateUser, getUsers, deleteUser };

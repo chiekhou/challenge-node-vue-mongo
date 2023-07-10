@@ -1,41 +1,27 @@
 version: '3.6'
+
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 3000:3000
-    depends_on:
-      - postgres
-      - mongodb
-    environment:
-      - NODE_ENV=dev
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=database
-      - POSTGRES_USER=pgUser
-      - POSTGRES_PASSWORD=pgPassword
-      - MONGO_HOST=mongodb
-      - MONGO_PORT=27017
-      - MONGO_DB=your_mongo_db
-
-  postgres:
-    image: postgres:latest
-    restart: always
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_DB=database
-      - POSTGRES_USER=pgUser
-      - POSTGRES_PASSWORD=pgPassword
-
-  mongodb:
+  mongo:
     image: mongo
-    restart: always
     ports:
       - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: pgUser
+      POSTGRES_PASSWORD: pgPassword
+      POSTGRES_DB: database
+
+  server:
+    image: node
+    ports:
+      - 3000:3000
+    environment:
+      DATABASE_URL: postgres://root:password@db:5432/app
+      JWT_SECRET: ImAstrongSecret

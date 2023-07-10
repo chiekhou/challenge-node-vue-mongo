@@ -1,21 +1,39 @@
-const { connectDB } = require("./config/database");
-const Sequelize = require("sequelize");
+// const { connectDB } = require("../config/db.config");
+//
+// const Sequelize = require("sequelize");
+// const { Pool } = require('pg');
+//
+// const pool = new Pool({
+//     host: 'localhost',
+//     port: 5432,
+//     user: 'pgUser',
+//     password: 'pgPassword',
+//     database: 'database'
+// });
+//
+// const db = {
+//     pool
+// };
+//
+// module.exports = db;
 
-// Connection à la bdd
-const sequelize = new Sequelize('database', 'pgUser', 'pgPassword',
-    {
-        host: 'localhost',
-        dialect: 'postgres',
-        dialecOptions: {
-            timezone: 'Etc/GMT-2',
-        },
-        logging: false
-    }
-)
-
-sequelize.authenticate()
-    .then(_ => console.log('La connexion à la base de données a bien été connecté'))
-    .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
-
-const exports = module.exports = {};
-exports.sequelize = sequelize;
+// const { connectDB } = require("../config/db.config");
+//
+// const Sequelize = require("sequelize");
+// const {Pool} = require('pg');
+//
+// const pool = new Pool({
+//     host: 'localhost',
+//     port: 5432,
+//     user:'pgUser',
+//     password:'pgPassword',
+//     database: 'database'
+// })
+//
+// connectDB.sequelize.authenticate()
+//     .then(_ => console.log('La connexion à la base de données a bien été connecté'))
+//     .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
+//
+// // const exports = module.exports = {};
+// exports.pool = pool;
+// exports.sequelize = Sequelize;
