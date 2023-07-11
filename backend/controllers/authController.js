@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken')
 const { User } = require("../db/models/user.model")
 
+
 // Accés public
 // Auth user/set token
 // GET /api/users/login
@@ -29,34 +30,29 @@ const loginUser = asyncHandler(async (req, res) => {
 // Accés public
 // POST /api/users/register
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password, username, confirm_password } = req.body;
+    const { Lastname, Firstname, Email, Password } = req.body;
 
-    if (password !== confirm_password) {
-        return res.status(400).json({
-            msg: "Les mots de passe ne sont pas identiques"
-        });
-    }
 
-    const userExists = await User.findOne({ email });
 
-    if (userExists) {
-        res.status(400);
-        throw new Error("L'utilisateur existe déja");
-    }
+    // const userExists = await User.findOne({ Email });
+
+    // if (userExists) {
+    //     res.status(400);
+    //     throw new Error("L'utilisateur existe déja");
+    // }
 
     const user = await User.create({
-        name,
-        username,
-        email,
-        password
+        Firstname,
+        Lastname,
+        Email,
+        Password
     });
 
     if (user) {
         res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            username: user.username,
-            email: user.email,
+            id: user.id,
+            Firstname: user.Firstname,
+            Email: user.Email,
             isAdmin: user.isAdmin,
             token: generateToken(user._id)
         });
@@ -79,7 +75,13 @@ const logoutUser = asyncHandler(async (req, res) => {
     res.status(200).json({ message: 'Deconnexion Utilisateur' });
 })
 
+const test = asyncHandler(async (req, res) => {
+    res.send("Hello World")
+    })
 
 
 
-module.exports = { loginUser, registerUser, logoutUser }; 
+
+
+
+module.exports = { loginUser, registerUser, logoutUser, test}; 
