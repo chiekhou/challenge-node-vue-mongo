@@ -1,5 +1,5 @@
 const express = require("express");
-const pool = require('./db/db');
+const pool = require('./db/index.js');
 const cors = require('cors');
 const path = require('path');
 const bodyParser = require('body-parser')
@@ -9,7 +9,7 @@ dotenv.config();
 const cookieParser = require('cookie-parser')
 const { notFound, errorHandler } = require('./middleware/errorMiddleware')
 const port = process.env.PORT || 3000;
-const userRoutes = require('./routes/userRoutes.js').router
+const authRoutes = require('./routes/authRoutes');
 // const users = require('./routes/api/users');
 const corsOptions = {
     origin: ['http://localhost:3000'],
@@ -45,8 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(cookieParser());
 
-app.use('/api/users', userRoutes);
-// app.use('/api/users', users);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => res.send('Projet en cours'));
 
