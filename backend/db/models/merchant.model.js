@@ -3,7 +3,7 @@ const {DataTypes, Model} = require('sequelize');
 function Merchant (sequelize){
     return  sequelize.define('Merchant', {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
