@@ -3,7 +3,7 @@ ADMIN:
 ValidateMerchant (après un envoie d'mail à l'inscription d'un marchand)
 GetAllMerchant
 getMerchantByID
-getAllTransaByMerchantID
+getAllTransaByMerchantID o GetAllTrasanction
 DeleteMerchant
 (UpdateMerchant)
 getAllTransac (toutes les transactions des marchands sur une période donnée)  
@@ -24,7 +24,7 @@ RefundPartial (?)
 RefndTotal (?)
 TransacStatus (KPI?)
 TransacHistorique
-ManageFraud
+ManageFraud (Bonus)
 
 
 API Plateform:
@@ -34,6 +34,6 @@ GetTransacByID
 GetOperationByTransacID
 CreateRefund
 
-OPERATIONS 
+OPERATIONS (?)
 
-HISTORIQUE TRANSAC'/OPERATION
+HISTORIQUE TRANSAC'/OPERATION (Get)
