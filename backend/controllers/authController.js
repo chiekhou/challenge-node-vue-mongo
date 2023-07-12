@@ -1,17 +1,19 @@
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken')
-const { User } = require("../db/models/user.model")
+const { User } = require("../db")
 
 
 // Accés public
 // Auth user/set token
 // GET /api/users/login
 const loginUser = asyncHandler(async (req, res) => {
+    
+    try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
-        res.status(201).json({
+        res.status(200).json({
             id: user.id,
             firstname: user.FirstName,
             lastname: user.LastName,
@@ -24,16 +26,17 @@ const loginUser = asyncHandler(async (req, res) => {
         res.status(401);
         throw new Error("Email ou mot de passe de invalides")
     }
-
+} catch (error) {
+    res.status(500).json({ message: error.message });
+}
 })
 
 // Accés public
 // POST /api/users/register
 const registerUser = asyncHandler(async (req, res) => {
+
+    try {
     const { Lastname, Firstname, Email, Password } = req.body;
-
-
-
     // const userExists = await User.findOne({ Email });
 
     // if (userExists) {
@@ -57,28 +60,38 @@ const registerUser = asyncHandler(async (req, res) => {
             token: generateToken(user._id)
         });
     } else {
-        res.status(400);
+        res.status(422);
         throw new Error("Données invalides")
     }
-
+} catch (error) {
+    res.status(500).json({ message: error.message });
+}
 })
 
 
 // Accés public
 // POST /api/users/logout
 const logoutUser = asyncHandler(async (req, res) => {
-    res.cookie('jwt', '', {
+    try {
+      res.cookie('jwt', '', {
         httpOnly: true,
         expires: new Date(0),
-    })
-
-    res.status(200).json({ message: 'Deconnexion Utilisateur' });
-})
-
-const test = asyncHandler(async (req, res) => {
-    res.send("Hello World")
-    })
-
+      });
+  
+      res.status(200).json({ message: 'Déconnexion Utilisateur' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  const test = asyncHandler(async (req, res) => {
+    try {
+      res.send('Hello World');
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
 
 
 
