@@ -37,12 +37,12 @@ const registerUser = asyncHandler(async (req, res) => {
 
     try {
     const { Lastname, Firstname, Email, Password } = req.body;
-    // const userExists = await User.findOne({ Email });
+    const userExists = await User.findOne({ Email });
 
-    // if (userExists) {
-    //     res.status(400);
-    //     throw new Error("L'utilisateur existe déja");
-    // }
+    if (userExists) {
+        res.status(400);
+        throw new Error("L'utilisateur existe déja");
+    }
 
     const user = await User.create({
         Firstname,
@@ -57,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
             Firstname: user.Firstname,
             Email: user.Email,
             isAdmin: user.isAdmin,
-            token: generateToken(user._id)
+            token: generateToken(user.id)
         });
     } else {
         res.status(422);
@@ -92,6 +92,11 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
   });
   
+  const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    })
+}
 
 
 

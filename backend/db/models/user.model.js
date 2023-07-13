@@ -9,54 +9,42 @@ function User(sequelize){
         },
         LastName:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         FirstName:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         PhoneNumber:{
             type: DataTypes.INTEGER,
-            allowNull: false,
         },
         Email:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         Password:{
             type: DataTypes.STRING,
-            allowNull: true,
         },
         Address:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         ZipCode:{
             type: DataTypes.INTEGER,
-            allowNull: false,
         },
         City:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         Country:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         CardNumber:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         Cvc:{
             type: DataTypes.STRING,
-            allowNull: false,
         },
         Devise:{
             type: DataTypes.STRING,
         },
         IsAdmin:{
             type: DataTypes.BOOLEAN,
-            defaultValue: false,
         }
     });
 }
