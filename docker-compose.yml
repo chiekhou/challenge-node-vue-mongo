@@ -22,7 +22,12 @@ services:
     image: node
     ports:
       - 5000:3000
+    volumes:
+      - ./backend:/usr/node/app
+    working_dir: /usr/node/app
     environment:
       DATABASE_URL: postgres://pgUser:pgPassword@db:5432/database
       JWT_SECRET: ImAstrongSecret
+      MONGO_URI: mongodb://root:password@mongo/app
+    command: "sh -c 'npm install && npm run server'"
    
