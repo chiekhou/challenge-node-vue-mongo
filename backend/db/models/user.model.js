@@ -1,4 +1,7 @@
 const {DataTypes, Model} = require('sequelize');
+const bcrypt = require('bcrypt');
+
+
 
 function User(sequelize){
     return  sequelize.define('User', {

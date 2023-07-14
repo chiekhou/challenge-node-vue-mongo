@@ -3,6 +3,7 @@ const {Sequelize} = require('sequelize');
 const fs = require("fs");
 const path = require("path");
 
+
 //Initialisation de sequelize avec notre base de données PostgreSql
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
