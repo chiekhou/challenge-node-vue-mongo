@@ -1,4 +1,5 @@
 const {DataTypes, Model} = require('sequelize');
+const {Operation} = require('./operation.model');
 
 function Merchant (sequelize){
     return  sequelize.define('Merchant', {
@@ -9,15 +10,19 @@ function Merchant (sequelize){
         },
         Name: {
             type: DataTypes.STRING,
+            allowNull: false,
         },
         NomSociete: {
             type: DataTypes.STRING,
+            allowNull: false,
         },
         Email: {
             type: DataTypes.STRING,
+            allowNull: false,
         },
         Password:{
-          type:DataTypes.STRING
+          type:DataTypes.STRING,
+            allowNull: false,
         },
         PhoneNumber: {
             type: DataTypes.INTEGER,
@@ -39,6 +44,12 @@ function Merchant (sequelize){
             defaultValue: false,
         }
     });
+    Merchant.hasMany(Operation, {
+        foreignKey: merchant_id,
+        sourcekey: id
+    });
+
+
 }
 
 module.exports = Merchant;

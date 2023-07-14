@@ -1,4 +1,5 @@
 const {DataTypes, Model} = require('sequelize');
+const {Credential } = require('./credential.model');
 
 function User(sequelize){
     return  sequelize.define('User', {
@@ -9,43 +10,32 @@ function User(sequelize){
         },
         LastName:{
             type: DataTypes.STRING,
+            allowNull: false,
         },
         FirstName:{
             type: DataTypes.STRING,
+            allowNull: false,
         },
         PhoneNumber:{
             type: DataTypes.INTEGER,
         },
         Email:{
             type: DataTypes.STRING,
+            allowNull: false,
         },
-        Password:{
+        Password: {
             type: DataTypes.STRING,
-        },
-        Address:{
-            type: DataTypes.STRING,
-        },
-        ZipCode:{
-            type: DataTypes.INTEGER,
-        },
-        City:{
-            type: DataTypes.STRING,
-        },
-        Country:{
-            type: DataTypes.STRING,
-        },
-        CardNumber:{
-            type: DataTypes.STRING,
-        },
-        Cvc:{
-            type: DataTypes.STRING,
-        },
-        Devise:{
-            type: DataTypes.STRING,
+            allowNull: false,
         },
         IsAdmin:{
             type: DataTypes.BOOLEAN,
+            defaultValue: false,
         }
+    });
+
+    User.belongsTo(Credential, {
+        foreignKey: credential_id,
+        sourcekey: id,
     });
 }
 

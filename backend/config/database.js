@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const postgres = require("postgres");
 
 const connectDB = async () => {
     try {

@@ -1,7 +1,9 @@
 const {DataTypes, Model} = require('sequelize');
+const {HistoricTransaction} = require('./historicTransaction.model')
+const {Operation} = require('./operation.model')
 
-function Transaction(sequelize){
-    return  sequelize.define('Transaction', {
+function Transaction(sequelize) {
+    return sequelize.define('Transaction', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -20,7 +22,18 @@ function Transaction(sequelize){
             allowNull: false,
         },
     });
+    Transaction.hasOne(HistoricTransaction,{
+        foreignKey: transaction_id,
+        sourceKey: id,
+    })
+
+    Transaction.belongsTo(Operation,{
+        foreignKey: transaction_id,
+        sourceKey: id,
+    })
 }
 
 
 module.exports = Transaction;
+
+

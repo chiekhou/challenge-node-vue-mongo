@@ -1,4 +1,5 @@
 const {DataTypes, Model} = require('sequelize');
+const Transaction = require("./transaction.model");
 
 function HistoricTransaction(sequelize){
     return  sequelize.define('HistoricTransaction', {
@@ -12,6 +13,10 @@ function HistoricTransaction(sequelize){
             allowNull: true,
         },
     });
+    HistoricTransaction.belongsTo(Transaction,{
+        foreignKey: historicTransaction_id,
+        sourcekey: id,
+    })
 }
 
 module.exports = HistoricTransaction;
