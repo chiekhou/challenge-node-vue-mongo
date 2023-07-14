@@ -33,9 +33,9 @@ const loginUser = asyncHandler(async (req, res) => {
       if (isMatch) {
         res.status(200).json({
           id: user.id,
-          firstname: user.FirstName,
-          lastname: user.LastName,
-          email: user.email,
+          FirstName: user.FirstName,
+          LastName: user.LastName,
+          Email: user.Email,
           isAdmin: user.isAdmin,
           //token: generateToken(user.id),
         });
@@ -54,7 +54,7 @@ const loginUser = asyncHandler(async (req, res) => {
 // POST /api/users/register
 const registerUser = asyncHandler(async (req, res) => {
   try {
-    const { Lastname, Firstname, Email, Password } = req.body;
+    const { FirstName, LastName, Email, Password } = req.body;
     const userExists = await User.findOne({ where: { Email: Email } });
 
     if (userExists) {
@@ -63,12 +63,12 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     const trimmedPassword = Password.trim(); 
-    const hashedPassword = await bcrypt.hash(Password, 10); 
+    const hashedPassword = await bcrypt.hash(trimmedPassword, 10); 
 
 
     const user = await User.create({
-      Firstname,
-      Lastname,
+      FirstName,
+      LastName,
       Email,
       Password: hashedPassword,
     });
@@ -76,7 +76,8 @@ const registerUser = asyncHandler(async (req, res) => {
     if (user) {
       res.status(201).json({
         id: user.id,
-        Firstname: user.Firstname,
+        FirstName: user.FirstName,
+        LastName: user.LastName,
         Email: user.Email,
         isAdmin: user.isAdmin,
       });
